@@ -27,7 +27,3 @@ if os.path.isfile(image):
 
     # Feed the image to the CNN
     bust(image)
-
-
-
-
