@@ -11,7 +11,7 @@ def bust(image):
 
     # Load the CNN architecture and pre-trained weights, compile the model
     model = CNNArchitecture.select('MiniVGGNet', 256, 256, 3, 2)
-    model.load_weights('classifier/weights.hdf5')
+    model.load_weights('buster/classifier/weights.hdf5')
     model.compile(loss='mse', optimizer='sgd', metrics=['accuracy'])
 
     # Return the prediction
@@ -22,7 +22,7 @@ def bust(image):
     tank = prediction[1]
 
     if tank > 0.10:
-        print "[RESULT] File {} contains a tank with {:.2f}% confidence.".format(image, tank * 100)
+        print "[POSITIVE] File {} contains a tank with {:.2f}% confidence.".format(image, tank * 100)
     else:
-        print "[RESULT] File {} does not contain a tank with {:.2f}% confidence.".format(image, other * 100)
+        print "[NEGATIVE] File {} does not contain a tank with {:.2f}% confidence.".format(image, other * 100)
 
