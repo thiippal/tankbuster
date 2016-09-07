@@ -1,6 +1,6 @@
 # Import the necessary packages
 import cv2
-from buster.cnn import CNNArchitecture
+from .. import cnn
 
 def bust(image):
     # Load and process the image
@@ -10,7 +10,7 @@ def bust(image):
     reshaped = rescaled.reshape((1,) + rescaled.shape)  # Reshape for input to CNN
 
     # Load the CNN architecture and pre-trained weights, compile the model
-    model = CNNArchitecture.select('MiniVGGNet', 256, 256, 3, 2)
+    model = cnn.CNNArchitecture.select('MiniVGGNet', 256, 256, 3, 2)
     model.load_weights('buster/classifier/weights.hdf5')
     model.compile(loss='mse', optimizer='sgd', metrics=['accuracy'])
 
