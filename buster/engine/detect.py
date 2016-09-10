@@ -1,16 +1,39 @@
 # Import the necessary packages
-import cv2
-from .. import cnn
+from PIL import Image
+import numpy as np
+from buster.cnn import CNNArchitecture
+from colorama import init, Fore
+init(autoreset=True)
+
+def alpha_to_color(image, color=(255, 255, 255)):
+    """Alpha composite an RGBA Image with a specified color.
+
+    Simpler, faster version than the solutions above.
+
+    Source: http://stackoverflow.com/a/9459208/284318
+
+    Keyword Arguments:
+    image -- PIL RGBA Image object
+    color -- Tuple r, g, b (default 255, 255, 255)
+
+    """
+    image.load()  # Needed for split()
+    background = Image.new('RGB', image.size, color)
+    background.paste(image, mask=image.split()[3])  # 3 is the alpha channel
+    return background
 
 def bust(image):
     # Load and process the image
-    original = cv2.imread(image)
-    resized = cv2.resize(original, (256, 256), interpolation=cv2.INTER_AREA)  # Resize
-    rescaled = resized.astype("float") / 255.0  # Scale into range 0...1
+    original = Image.open(image)
+    if original.mode == 'RGBA':  # Check for alpha channel
+        original = alpha_to_color(original)  # Remove alpha channel
+    resized = original.resize((256, 256))  # Resize
+    image_array = np.asarray(resized)  # Convert image to numpy array for rescaling
+    rescaled = image_array.astype("float") / 255.0  # Scale into range 0...1
     reshaped = rescaled.reshape((1,) + rescaled.shape)  # Reshape for input to CNN
 
     # Load the CNN architecture and pre-trained weights, compile the model
-    model = cnn.CNNArchitecture.select('MiniVGGNet', 256, 256, 3, 2)
+    model = CNNArchitecture.select('MiniVGGNet', 256, 256, 3, 2)
     model.load_weights('buster/classifier/weights.hdf5')
     model.compile(loss='mse', optimizer='sgd', metrics=['accuracy'])
 
@@ -21,8 +44,7 @@ def bust(image):
     other = prediction[0]
     tank = prediction[1]
 
-    if tank > 0.10:
-        print "[POSITIVE] File {} contains a tank with {:.2f}% confidence.".format(image, tank * 100)
+    if tank > 0.25:
+        print (Fore.GREEN + "[POSITIVE] ") + (Fore.BLACK + "File {} contains a tank (confidence: {:.2f}%).").format(image, tank * 100)
     else:
-        print "[NEGATIVE] File {} does not contain a tank with {:.2f}% confidence.".format(image, other * 100)
-
+        print (Fore.RED + "[NEGATIVE] ") + (Fore.BLACK + "File {} does not contain a tank (confidence: {:.2f}%).").format(image, other * 100)

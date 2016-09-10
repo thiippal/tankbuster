@@ -18,5 +18,6 @@ setup(name='tankbuster',
       download_url='https://github.com/thiippal/tankbuster/tarball/0.0.1',  # Still missing
       install_requires=["Pillow",
                         "numpy",
-                        "keras"],
+                        "keras",
+                        "colorama"],
       classifiers=['Programming Language :: Python :: 2.7'])
