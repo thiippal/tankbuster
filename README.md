@@ -2,7 +2,11 @@
 
 Tankbuster is a convolutional neural net (CNN) trained to classify images according to whether they contain <a href="https://en.wikipedia.org/wiki/T-72">Soviet/Russian T-72</a> main battle tanks or not.
 
-Built using <a href="http://keras.io">Keras</a>, the classifier has been trained using a collection of images showing T-72 from various angles against a collection of images showing both street and natural scenes without tanks. The data has been augmented using the Keras <a href="http://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html">ImageDataGenerator</a> class, resulting in approximately 5000 images per class.
+Built using <a href="http://keras.io">Keras</a>, the classifier has been trained using a collection of images showing T-72 from various angles against a collection of images showing both street and natural scenes without tanks. 
+
+The data has been augmented using the Keras <a href="http://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html">ImageDataGenerator</a>, resulting in approximately 5000 images for each class.
+
+The classifier achieves 88% accuracy on the testing set.
 
 ## Installation
 
@@ -10,9 +14,15 @@ Tankbuster may be installed from the Python Package Index (PyPI) by typing the f
 
 <code>pip install tankbuster</code>
 
+This will also install the required modules: Pillow, Keras, colorama and h5py.
+
+Naturally, you can also clone this repository for the latest version.
+
 ## Usage
 
 ### Running Tankbuster from the command line
+
+If you wish to run Tankbuster from the command line, it is best to clone this repository to get the driver script, <code>bust.py</code>.
 
 To examine a single image from the command line, enter the following command on the command line:
 
@@ -24,10 +34,10 @@ To examine all images in a directory, use the command below. Take care to includ
 
 ### Integrating Tankbuster into your code
 
-If you wish to integrate Tankbuster into your code, import the module using:
+If you wish to integrate Tankbuster into your Python program, import the module using:
 
 <code>import tankbuster</code>
 
-Importing the module allows you to call the <i>bust</i> method, which takes an image file as the input.
+Importing the module allows you to call the <i>bust</i> method, which takes an image file as input.
 
 <code>tankbuster.bust('image.png')</code>
