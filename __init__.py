@@ -1,5 +1,3 @@
-__all__ = ['bust']
-
-from .detector import bust
+from tankbuster.engine import bust
 
 
