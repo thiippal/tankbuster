@@ -1,7 +1,7 @@
 import os
 import argparse
 import glob
-from buster.engine import bust
+from tankbuster.engine import bust
 
 # Set up the argument parser
 ap = argparse.ArgumentParser()

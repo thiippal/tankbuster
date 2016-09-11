@@ -1,7 +1,8 @@
 # Import the necessary packages
-from PIL import Image
 import numpy as np
+from PIL import Image
 from .. import cnn
+from pkg_resources import resource_filename
 from colorama import init, Fore
 init(autoreset=True)
 
@@ -33,9 +34,10 @@ def bust(image):
     reshaped = rescaled.reshape((1,) + rescaled.shape)  # Reshape for input to CNN
 
     # Load the CNN architecture and pre-trained weights, compile the model
-    model = cnn.CNNArchitecture.select('MiniVGGNet', 256, 256, 3, 2)
-    model.load_weights('buster/classifier/weights.hdf5')
-    model.compile(loss='mse', optimizer='sgd', metrics=['accuracy'])
+    model = cnn.CNNArchitecture.select('MiniVGGNet', 256, 256, 3, 2)  # Select MiniVGGNet
+    model_weights = resource_filename(__name__, '../classifier/weights.hdf5')  # Locate model weights
+    model.load_weights(model_weights)  # Load weights
+    model.compile(loss='mse', optimizer='sgd', metrics=['accuracy'])  # Compile the model
 
     # Return the prediction
     prediction = model.predict_proba(reshaped, verbose=0)[0]
