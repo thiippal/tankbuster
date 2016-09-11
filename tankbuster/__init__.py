@@ -1,1 +1,1 @@
-from engine import bust
+from engine import bust, npbust

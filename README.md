@@ -32,12 +32,18 @@ To examine all images in a directory, use the command below. Take care to includ
 
 <code>python bust.py -i directory/</code>
 
-### Integrating Tankbuster into your code
+### Integrating Tankbuster into your program
 
-If you wish to integrate Tankbuster into your Python program, import the module using:
+If you wish to integrate Tankbuster into your Python program, import the key functions of the module using:
 
-<code>import tankbuster</code>
+<code>from tankbuster import bust, npbust</code>
 
-Importing the module allows you to call the <i>bust</i> method, which takes an image file as input.
+This allows you to call the <i>bust</i> function, which takes an image file as input.
 
 <code>tankbuster.bust('image.png')</code>
+
+Alternatively, you can call the <i>npbust</i> function, which takes a NumPy array as input. This is particularly useful if your image processing pipeline relies on popular libraries such as OpenCV or Mahotas, which both make heavy use of NumPy.
+
+<code>tankbuster.npbust(image)</code>
+
+The <i>npbust</i> function returns a tuple of values, which give the probabilities for class membership. The first value stands for the class 'other' whereas the second is for 't-72'. These values can be used as the basis for further actions, such as flagging the image.
