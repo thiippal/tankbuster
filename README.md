@@ -10,13 +10,17 @@ The classifier achieves 88% accuracy on the testing set.
 
 ## Installation
 
-Tankbuster may be installed from the Python Package Index (PyPI) by typing the following command on the command line:
+<b>Note: it is sincerely recommended to install Tankbuster into its own <a href="http://docs.python-guide.org/en/latest/dev/virtualenvs/">virtual environment</a>.</b> 
+
+Assuming you have <a href="https://pip.pypa.io/en/stable/installing/">installed pip</a>, Tankbuster may be installed from the Python Package Index (PyPI) by typing the following command on the command line:
 
 <code>pip install tankbuster</code>
 
 This will also install the required modules: Pillow, Keras, colorama and h5py.
 
-Naturally, you can also clone or download the GitHub repository for the latest version.
+Naturally, you can also clone or download the <a href="https://github.com/thiippal/tankbuster">GitHub repository</a> to get the latest version. Enter the following command to install Tankbuster and the required packages:
+
+<code>pip install .</code>
 
 ## Usage
 
@@ -32,9 +36,9 @@ To examine all images in a directory, use the command below. Take care to includ
 
 <code>python bust.py -i directory/</code>
 
-### Integrating Tankbuster into your program
+### Integrating Tankbuster into your own code
 
-If you wish to integrate Tankbuster into your Python program, import the key functions of the module using:
+If you wish to integrate Tankbuster into your Python code, import the key functions of the module using:
 
 <code>from tankbuster import bust, npbust</code>
 
@@ -42,7 +46,7 @@ This allows you to call the <i>bust</i> function, which takes an image file as i
 
 <code>tankbuster.bust('image.png')</code>
 
-Alternatively, you can call the <i>npbust</i> function, which takes a NumPy array as input. This is particularly useful if your image processing pipeline relies on popular libraries such as OpenCV or Mahotas, which both make heavy use of NumPy.
+Alternatively, you can call the <i>npbust</i> function, which takes a NumPy array as input. This is particularly useful if your image processing pipeline relies on popular libraries such as OpenCV or Mahotas, which both heavy use of NumPy.
 
 <code>tankbuster.npbust(image)</code>
 
