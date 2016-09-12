@@ -16,7 +16,7 @@ Tankbuster may be installed from the Python Package Index (PyPI) by typing the f
 
 This will also install the required modules: Pillow, Keras, colorama and h5py.
 
-Naturally, you can also clone this repository for the latest version.
+Naturally, you can also clone or download the GitHub repository for the latest version.
 
 ## Usage
 
