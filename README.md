@@ -46,7 +46,7 @@ This allows you to call the <i>bust</i> function, which takes an image file as i
 
 <code>tankbuster.bust('image.png')</code>
 
-Alternatively, you can call the <i>npbust</i> function, which takes a NumPy array as input. This is particularly useful if your image processing pipeline relies on popular libraries such as OpenCV or Mahotas, which both heavy use of NumPy.
+Alternatively, you can call the <i>npbust</i> function, which takes a NumPy array as input. This is particularly useful if your image processing pipeline relies on popular libraries such as OpenCV or Mahotas, which both make heavy use of NumPy.
 
 <code>tankbuster.npbust(image)</code>
 
