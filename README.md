@@ -42,12 +42,29 @@ If you wish to integrate Tankbuster into your Python code, import the key functi
 
 <code>from tankbuster import bust, npbust</code>
 
-This allows you to call the <i>bust</i> function, which takes an image file as input.
+This allows you to call the <i>bust</i> method, which takes an image file as input.
 
 <code>tankbuster.bust('image.png')</code>
 
-Alternatively, you can call the <i>npbust</i> function, which takes a NumPy array as input. This is particularly useful if your image processing pipeline relies on popular libraries such as OpenCV or Mahotas, which both make heavy use of NumPy.
+Alternatively, you can call the <i>npbust</i> method, which takes a NumPy array as input. This is particularly useful if your image processing pipeline relies on popular libraries such as OpenCV or Mahotas, which both make heavy use of NumPy.
 
 <code>tankbuster.npbust(image)</code>
 
-The <i>npbust</i> function returns a tuple of values, which give the probabilities for class membership. The first value stands for the class 'other' whereas the second is for 't-72'. These values can be used as the basis for further actions, such as flagging the image.
+The <i>npbust</i> method returns a tuple of values, which give the probabilities for class membership. The first value stands for the class 'other' whereas the second is for 't-72'. These values can be used as the basis for further actions, such as flagging the image.
+
+## In action
+
+<b>Disembarking from a Ropucha-class landing craft</b><br>
+Image contains a tank with 99.82% confidence.
+
+<image src="demo_images/with_ropucha.jpg" width="400px">
+
+<b>Parked next to a Lada</b><br>
+Image contains a tank with 99.88% confidence.
+
+<image src="demo_images/with_lada.jpg" width="400px">
+
+<b>Featured in a low-quality screen capture</b><br>
+Image contains a tank with 69.03% confidence.
+
+<image src="demo_images/from_screen_capture.png" width="400px">
