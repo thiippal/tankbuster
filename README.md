@@ -6,7 +6,7 @@ Built using <a href="http://keras.io">Keras</a>, the classifier has been trained
 
 The data has been augmented using the Keras <a href="http://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html">ImageDataGenerator</a>, resulting in approximately 5000 images for each class.
 
-The classifier achieves 88% accuracy on the testing set.
+The classifier achieves 91.55% accuracy on the validation data.
 
 ## Installation
 
@@ -55,16 +55,16 @@ The <i>npbust</i> method returns a tuple of values, which give the probabilities
 ## In action
 
 <b>Disembarking from a Ropucha-class landing craft</b><br>
-Image contains a tank with 99.82% confidence.
+Image contains a tank with 99.99% confidence.
 
 <image src="demo_images/with_ropucha.jpg" width="400px">
 
 <b>Parked next to a Lada</b><br>
-Image contains a tank with 99.88% confidence.
+Image contains a tank with 99.93% confidence.
 
 <image src="demo_images/with_lada.jpg" width="400px">
 
 <b>Featured in a low-quality screen capture</b><br>
-Image contains a tank with 69.03% confidence.
+Image contains a tank with 50.74% confidence.
 
 <image src="demo_images/from_screen_capture.png" width="400px">
