@@ -6,7 +6,7 @@ Built using <a href="http://keras.io">Keras</a>, the classifier has been trained
 
 The data has been augmented using the Keras <a href="http://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html">ImageDataGenerator</a>, resulting in approximately 5000 images for each class.
 
-The classifier achieves 91.55% accuracy on the validation data.
+The classifier achieves a validation accuracy of 91.55%.
 
 ## Installation
 
