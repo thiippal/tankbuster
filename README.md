@@ -1,10 +1,10 @@
 # Tankbuster
 
-Tankbuster is a convolutional neural net (CNN) trained to classify whether images contain Soviet/Russian <a href="http://en.wikipedia.org/wiki/T-72">T-72</a> main battle tanks or <a href="http://en.wikipedia.org/wiki/BMP_development">BMP</a> armored personnel carriers.
+Tankbuster is a convolutional neural net (CNN) trained to detect Soviet/Russian <a href="http://en.wikipedia.org/wiki/T-72">T-72</a> main battle tanks or <a href="http://en.wikipedia.org/wiki/BMP_development">BMP</a> armored personnel carriers in photographs.
 
-Built using <a href="http://keras.io">Keras</a>, the classifier has been trained using a collection of images showing T-72s and BMPs from various angles against a collection of images showing both street and natural scenes without tanks or APCs. 
+Built using <a href="http://keras.io">Keras</a>, the classifier has been trained using a collection of images showing T-72s and BMPs from various angles against a collection of photographs featuring street and natural scenes. 
 
-The data has been augmented using the Keras <a href="http://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html">ImageDataGenerator</a>, resulting in approximately 3000 images for each class.
+The data has been augmented using the Keras <a href="http://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html">ImageDataGenerator</a>, generating approximately 3600 images for each class.
 
 The classifier achieves an accuracy of 91.55% on the testing set.
 
@@ -36,9 +36,9 @@ To examine all images in a directory, use the command below. Take care to includ
 
 <code>python bust.py -i directory/</code>
 
-### Integrating Tankbuster into your own code
+### Integrating Tankbuster into your own program
 
-If you wish to integrate Tankbuster into your Python code, import the key functions of the module using:
+If you wish to integrate Tankbuster into your Python program, import the key functions of the module using:
 
 <code>from tankbuster import bust, npbust</code>
 
@@ -50,7 +50,7 @@ Alternatively, you can call the <i>npbust</i> method, which takes a NumPy array 
 
 <code>npbust(image)</code>
 
-The <i>npbust</i> method returns dictionary of class labels and their associated probabilities. These values can be used as the basis for further actions, such as flagging the image.
+The <i>npbust</i> method returns a dictionary of class labels with their associated probabilities. These values can be used as the basis for further actions, such as flagging the image.
 
 ## In action
 
