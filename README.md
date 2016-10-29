@@ -1,12 +1,12 @@
 # Tankbuster
 
-Tankbuster is a convolutional neural net (CNN) trained to classify images according to whether they contain <a href="https://en.wikipedia.org/wiki/T-72">Soviet/Russian T-72</a> main battle tanks or not.
+Tankbuster is a convolutional neural net (CNN) trained to classify whether images contain Soviet/Russian <a href="http://en.wikipedia.org/wiki/T-72">T-72</a> main battle tanks or <a href="http://en.wikipedia.org/wiki/BMP_development">BMP</a> armored personnel carriers.
 
-Built using <a href="http://keras.io">Keras</a>, the classifier has been trained using a collection of images showing T-72 from various angles against a collection of images showing both street and natural scenes without tanks. 
+Built using <a href="http://keras.io">Keras</a>, the classifier has been trained using a collection of images showing T-72s and BMPs from various angles against a collection of images showing both street and natural scenes without tanks or APCs. 
 
-The data has been augmented using the Keras <a href="http://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html">ImageDataGenerator</a>, resulting in approximately 5000 images for each class.
+The data has been augmented using the Keras <a href="http://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html">ImageDataGenerator</a>, resulting in approximately 3000 images for each class.
 
-The classifier achieves a validation accuracy of 91.55%.
+The classifier achieves an accuracy of 91.55% on the testing set.
 
 ## Installation
 
@@ -44,13 +44,13 @@ If you wish to integrate Tankbuster into your Python code, import the key functi
 
 This allows you to call the <i>bust</i> method, which takes an image file as input.
 
-<code>tankbuster.bust('image.png')</code>
+<code>bust('image.png')</code>
 
 Alternatively, you can call the <i>npbust</i> method, which takes a NumPy array as input. This is particularly useful if your image processing pipeline relies on popular libraries such as OpenCV or Mahotas, which both make heavy use of NumPy.
 
-<code>tankbuster.npbust(image)</code>
+<code>npbust(image)</code>
 
-The <i>npbust</i> method returns a tuple of values, which give the probabilities for class membership. The first value stands for the class 'other' whereas the second is for 't-72'. These values can be used as the basis for further actions, such as flagging the image.
+The <i>npbust</i> method returns dictionary of class labels and their associated probabilities. These values can be used as the basis for further actions, such as flagging the image.
 
 ## In action
 
