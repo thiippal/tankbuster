@@ -20,14 +20,12 @@ user_input = args['input']
 if os.path.isdir(user_input):
 
     # Feed the images to the CNN
-    images = list_images(user_input)  # list images
-    for i in images:
-        bust(i)
-
-    # TODO Make this more robust by automatically excluding non-image files
+    images = list_images(user_input)  # retrieve image files
+    for i in images:  # loop over the images
+        bust(i)  # feed image to the classifier
 
 # Check if the input is a file
 if os.path.isfile(user_input):
 
-    # Feed the image to the CNN
+    # Feed the image to the classifier
     bust(user_input)
