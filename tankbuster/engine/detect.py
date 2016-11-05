@@ -37,7 +37,7 @@ def bust(image):
     original = Image.open(image)
     if original.mode == 'RGBA':  # Check for alpha channel
         original = alpha_to_color(original)  # Remove alpha channel
-    resized = original.resize((150, 150))  # Resize
+    resized = original.resize((150, 150), resample=Image.BILINEAR)  # Resize
     image_array = np.asarray(resized)  # Convert image to numpy array for rescaling
     rescaled = image_array.astype("float") / 255.0  # Scale into range 0...1
 
@@ -61,10 +61,10 @@ def bust(image):
 
     # Print the prediction and probabilities
     if pred == 1 or pred == 2:
-        print (Fore.GREEN + "[POSITIVE] ") + (Fore.BLACK + "File {}: {}, confidence {:.2f}%.").format(
+        print (Fore.GREEN + "[POSITIVE] ") + (Fore.BLACK + "File {}: {} ({:.2f}%)").format(
             image, labels[int(pred)], predictions[pred] * 100)
     elif pred == 0:
-        print (Fore.RED + "[NEGATIVE] ") + (Fore.BLACK + "File {}: other, confidence {:.2f}%.").format(
+        print (Fore.RED + "[NEGATIVE] ") + (Fore.BLACK + "File {}: other ({:.2f}%)").format(
             image, predictions[pred] * 100)
 
 def npbust(image):
@@ -75,11 +75,11 @@ def npbust(image):
         image: An image as a NumPy array with three channels.
 
     Returns:
-        Returns a dictionary of labels and their associated probabilities..
+        Returns a dictionary of labels and their associated probabilities.
     """
     # Load and process the image
     original = Image.fromarray(image, 'RGB')
-    resized = original.resize((150, 150))  # Resize
+    resized = original.resize((150, 150), resample=Image.BILINEAR)  # Resize
     image_array = np.asarray(resized)  # Convert image to numpy array for rescaling
     rescaled = image_array.astype('float') / 255.0  # Scale into range 0...1
     reorganized = np.transpose(rescaled, (2, 0, 1))  # Moving array at index 2 (number of channels) to first position
