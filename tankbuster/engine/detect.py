@@ -1,6 +1,5 @@
 # Import the necessary packages
 import numpy as np
-import mahotas
 from PIL import Image
 from .. import cnn
 from pkg_resources import resource_filename
