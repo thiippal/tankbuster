@@ -47,7 +47,7 @@ def bust(image):
 
     # Load the CNN architecture and pre-trained weights, compile the model
     model = cnn.CNNArchitecture.select('MiniVGGNet', 3, 150, 150, 3)  # Select MiniVGGNet
-    model_weights = resource_filename(__name__, '../classifier/weights.h5')  # Locate model weights
+    model_weights = resource_filename(__name__, 'weights.h5')  # Locate model weights
     model.load_weights(model_weights)  # Load weights
     model.compile(loss='mse', optimizer='sgd', metrics=['accuracy'])  # Compile the model
 
