@@ -54,27 +54,22 @@ The <i>npbust</i> method returns a dictionary of class labels with their associa
 
 ## In action
 
-<b>Disembarking from a Ropucha-class landing craft</b><br>
-Prediction: T-72; probability 52.14%.
-
-<image src="demo_images/with_ropucha.jpg" width="400px">
-
 <b>Parked next to a Lada</b><br>
-Prediction: T-72; probability 99.98%.
+Prediction: T-72; probability 99.82%.
 
 <image src="demo_images/with_lada.jpg" width="400px">
 
 <b>Featured in a low-quality screen capture</b><br>
-Prediction: T-72; probability 89.06%.
+Prediction: T-72; probability 90.44%.
 
 <image src="demo_images/from_screen_capture.png" width="400px">
 
 <b>Parked in the backyard</b><br>
-Prediction: BMP; probability 99.93%.
+Prediction: BMP; probability 99.88%.
 
 <image src="demo_images/backyard.jpg" width="400px">
 
 <b>Knocked out in group</b><br>
-Prediction: BMP; probability 91.63%.
+Prediction: BMP; probability 95.89%.
 
 <image src="demo_images/knocked_out.jpg" width="400px">
