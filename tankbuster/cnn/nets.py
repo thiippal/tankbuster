@@ -14,7 +14,7 @@ class CNNArchitecture:
         # Map strings to functions
         nets = {
             "MiniVGGNet": CNNArchitecture.MiniVGGNet,
-            "MiniVGGNetCAM": CNNArchitecture.MiniVGGNetCAM()
+            "MiniVGGNetCAM": CNNArchitecture.MiniVGGNetCAM
         }
 
         # Initialize architecture
