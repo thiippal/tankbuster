@@ -1,6 +1,5 @@
 import os
 import argparse
-import glob
 from tankbuster.engine import bust
 from tankbuster.utils import list_images
 

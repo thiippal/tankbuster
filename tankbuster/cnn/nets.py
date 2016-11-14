@@ -28,12 +28,12 @@ class CNNArchitecture:
         return net(*args, **kargs)
 
     @staticmethod
-    def MiniVGGNet(numchannels, imgrows, imgcols, numclasses):
+    def MiniVGGNet(imgrows, imgcols, numchannels, numclasses):
         # Initialize the model
         model = Sequential()
 
         # Define the first set of  CONV -> RELU -> CONV -> RELU -> POOL layers
-        model.add(Convolution2D(32, 3, 3, input_shape=(numchannels, imgrows, imgcols), dim_ordering='th'))
+        model.add(Convolution2D(32, 3, 3, input_shape=(imgrows, imgcols, numchannels), dim_ordering='tf'))
         model.add(Activation("relu"))
         model.add(Convolution2D(32, 3, 3))
         model.add(Activation("relu"))
