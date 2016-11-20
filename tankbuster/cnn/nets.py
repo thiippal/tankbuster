@@ -14,7 +14,6 @@ class CNNArchitecture:
         # Map strings to functions
         nets = {
             "MiniVGGNet": CNNArchitecture.MiniVGGNet,
-            "MiniVGGNetCAM": CNNArchitecture.MiniVGGNetCAM
         }
 
         # Initialize architecture
@@ -65,24 +64,4 @@ class CNNArchitecture:
         model.add(Activation("softmax"))
 
         # Return the network architecture
-        return model
-
-    @staticmethod
-    def MiniVGGNetCAM():
-        # Initialize the model
-        model = Sequential()
-
-        # Define the first set of  CONV -> RELU -> CONV -> RELU -> POOL layers
-        model.add(Convolution2D(32, 3, 3, input_shape=(3, None, None), dim_ordering='th'))
-        model.add(Activation("relu"))
-        model.add(Convolution2D(32, 3, 3))
-        model.add(Activation("relu"))
-        model.add(MaxPooling2D(pool_size=(3, 3)))
-
-        # Define the second set of CONV -> RELU -> CONV -> RELU -> POOL layers
-        model.add(Convolution2D(64, 3, 3))
-        model.add(Activation("relu"))
-        model.add(Convolution2D(64, 3, 3))
-        model.add(Activation("relu"))
-
         return model
