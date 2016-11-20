@@ -4,23 +4,8 @@ from PIL import Image
 from .. import cnn
 from pkg_resources import resource_filename
 from colorama import init, Fore
+from keras.preprocessing.image import load_img, img_to_array
 init(autoreset=True)
-
-def alpha_to_color(image, colour=(255, 255, 255)):
-    """
-    Remove alpha channel from an image.
-
-    Args:
-        image: An image with an alpha channel.
-        colour: Background colour of the new image.
-
-    Returns:
-        An image without alpha channel.
-    """
-    image.load()  # Needed for split()
-    background = Image.new('RGB', image.size, colour)
-    background.paste(image, mask=image.split()[3])  # 3 is the alpha channel
-    return background
 
 def bust(image):
     """
@@ -32,22 +17,16 @@ def bust(image):
     Returns:
         Prints the class label with the highest probability.
     """
+
     # Load and process the image
-    original = Image.open(image)
-    if original.mode == 'RGBA':  # Check for alpha channel
-        original = alpha_to_color(original)  # Remove alpha channel
-    resized = original.resize((150, 150), resample=Image.BILINEAR)  # Resize
-    image_array = np.asarray(resized)  # Convert image to numpy array for rescaling
-    rescaled = image_array.astype("float") / 255.0  # Scale into range 0...1
-
-    # Reorganize arrays for Theano
-    reorganized = np.transpose(rescaled, (2, 0, 1))  # Moving array at index 2 (number of channels) to first position
-
-    reshaped = reorganized.reshape((1,) + reorganized.shape)  # Reshape for input to CNN
+    original = load_img(image, target_size=(150, 150))  # Load image and resize to 150x150
+    array = img_to_array(original, dim_ordering='tf')  # Convert image to numpy array
+    normalized = array.astype("float") / 255.0  # Normalize the array into range 0...1
+    reshaped = normalized.reshape((1,) + normalized.shape)  # Reshape for input for CNN
 
     # Load the CNN architecture and pre-trained weights, compile the model
-    model = cnn.CNNArchitecture.select('MiniVGGNet', 3, 150, 150, 3)  # Select MiniVGGNet
-    model_weights = resource_filename(__name__, 'weights.h5')  # Locate model weights
+    model = cnn.CNNArchitecture.select('MiniVGGNet', 150, 150, 3, 3)  # Select MiniVGGNet
+    model_weights = resource_filename(__name__, 'tf-weights.h5')  # Locate model weights
     model.load_weights(model_weights)  # Load weights
     model.compile(loss='mse', optimizer='sgd', metrics=['accuracy'])  # Compile the model
 
@@ -71,7 +50,7 @@ def npbust(image):
     Predict the class of the input image (other/t-72/bmp).
 
     Args:
-        image: An image as a NumPy array with three channels.
+        image: An RGB image as a NumPy array.
 
     Returns:
         Returns a dictionary of labels and their associated probabilities.
@@ -80,13 +59,12 @@ def npbust(image):
     original = Image.fromarray(image, 'RGB')
     resized = original.resize((150, 150), resample=Image.BILINEAR)  # Resize
     image_array = np.asarray(resized)  # Convert image to numpy array for rescaling
-    rescaled = image_array.astype('float') / 255.0  # Scale into range 0...1
-    reorganized = np.transpose(rescaled, (2, 0, 1))  # Moving array at index 2 (number of channels) to first position
-    reshaped = reorganized.reshape((1,) + reorganized.shape)  # Reshape for input to CNN
+    normalized = image_array.astype('float') / 255.0  # Normalize into range 0...1
+    reshaped = normalized.reshape((1,) + normalized.shape)  # Reshape for input to CNN
 
     # Load the CNN architecture and pre-trained weights, compile the model
-    model = cnn.CNNArchitecture.select('MiniVGGNet', 3, 150, 150, 3)  # Select MiniVGGNet
-    model_weights = resource_filename(__name__, '../classifier/weights.h5')  # Locate model weights
+    model = cnn.CNNArchitecture.select('MiniVGGNet', 150, 150, 3, 3)  # Select MiniVGGNet
+    model_weights = resource_filename(__name__, 'tf-weights.h5')  # Locate model weights
     model.load_weights(model_weights)  # Load weights
     model.compile(loss='mse', optimizer='sgd', metrics=['accuracy'])  # Compile the model
 
@@ -95,4 +73,3 @@ def npbust(image):
     preds = {'other': (predictions[0] * 100), 't-72': (predictions[1] * 100), 'bmp': (predictions[2] * 100)}
 
     return preds
-
