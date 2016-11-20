@@ -21,12 +21,12 @@ def bust(image):
     # Load and process the image
     original = load_img(image, target_size=(150, 150))  # Load image and resize to 150x150
     array = img_to_array(original, dim_ordering='tf')  # Convert image to numpy array
-    rescaled = array.astype("float") / 255.0  # Scale the array into range 0...1
-    reshaped = rescaled.reshape((1,) + rescaled.shape)  # Reshape for input for CNN
+    normalized = array.astype("float") / 255.0  # Normalize the array into range 0...1
+    reshaped = normalized.reshape((1,) + normalized.shape)  # Reshape for input for CNN
 
     # Load the CNN architecture and pre-trained weights, compile the model
     model = cnn.CNNArchitecture.select('MiniVGGNet', 150, 150, 3, 3)  # Select MiniVGGNet
-    model_weights = resource_filename(__name__, 'weights.h5')  # Locate model weights
+    model_weights = resource_filename(__name__, 'tf-weights.h5')  # Locate model weights
     model.load_weights(model_weights)  # Load weights
     model.compile(loss='mse', optimizer='sgd', metrics=['accuracy'])  # Compile the model
 
@@ -59,13 +59,12 @@ def npbust(image):
     original = Image.fromarray(image, 'RGB')
     resized = original.resize((150, 150), resample=Image.BILINEAR)  # Resize
     image_array = np.asarray(resized)  # Convert image to numpy array for rescaling
-    rescaled = image_array.astype('float') / 255.0  # Scale into range 0...1
-    reorganized = np.transpose(rescaled, (2, 0, 1))  # Moving array at index 2 (number of channels) to first position
-    reshaped = reorganized.reshape((1,) + reorganized.shape)  # Reshape for input to CNN
+    normalized = image_array.astype('float') / 255.0  # Normalize into range 0...1
+    reshaped = normalized.reshape((1,) + normalized.shape)  # Reshape for input to CNN
 
     # Load the CNN architecture and pre-trained weights, compile the model
-    model = cnn.CNNArchitecture.select('MiniVGGNet', 3, 150, 150, 3)  # Select MiniVGGNet
-    model_weights = resource_filename(__name__, '../classifier/weights.h5')  # Locate model weights
+    model = cnn.CNNArchitecture.select('MiniVGGNet', 150, 150, 3, 3)  # Select MiniVGGNet
+    model_weights = resource_filename(__name__, 'tf-weights.h5')  # Locate model weights
     model.load_weights(model_weights)  # Load weights
     model.compile(loss='mse', optimizer='sgd', metrics=['accuracy'])  # Compile the model
 
@@ -74,4 +73,3 @@ def npbust(image):
     preds = {'other': (predictions[0] * 100), 't-72': (predictions[1] * 100), 'bmp': (predictions[2] * 100)}
 
     return preds
-
