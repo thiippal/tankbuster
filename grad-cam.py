@@ -25,7 +25,6 @@ def load_image(path):
     img = image.load_img(img_path, target_size=(150, 150))
     x = image.img_to_array(img)
     x = np.expand_dims(x, axis=0)
-    # x = preprocess_input(x)  # Remove VGG16 preprocess
     return x
 
 def grad_cam(input_model, image, category_index, layer_name):
@@ -42,9 +41,6 @@ def grad_cam(input_model, image, category_index, layer_name):
 
     target_layer = lambda x: target_category_loss(x, category_index, nb_classes)
     model.add(Lambda(target_layer, output_shape=target_category_loss_output_shape))
-
-    # Set testing phase = no dropout
-    # K.set_learning_phase(0)
 
     # Construct a dictionary of layers
     layer_dict = dict([(layer.name, layer) for layer in model.layers[0].layers])
@@ -63,7 +59,7 @@ def grad_cam(input_model, image, category_index, layer_name):
     for i, w in enumerate(weights):
         cam += w * output[:, :, i]
 
-    cam = cv2.resize(cam, (224, 224))
+    cam = cv2.resize(cam, (150, 150))
     cam = np.maximum(cam, 0)
     cam = cam / np.max(cam)
 
