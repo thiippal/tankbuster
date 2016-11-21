@@ -44,7 +44,7 @@ def grad_cam(input_model, image, category_index, layer_name):
     model.add(Lambda(target_layer, output_shape=target_category_loss_output_shape))
 
     # Set testing phase = no dropout
-    K.set_learning_phase(0)
+    # K.set_learning_phase(0)
 
     # Construct a dictionary of layers
     layer_dict = dict([(layer.name, layer) for layer in model.layers[0].layers])
@@ -82,7 +82,7 @@ preprocessed_input = load_image(sys.argv[1])
 # model = VGG16(weights='imagenet')
 
 model = CNNArchitecture.select('MiniVGGNet', 150, 150, 3, 3)
-model.load_weights('tankbuster/engine/tf-weights.h5')
+model.load_weights('tankbuster/engine/weights.h5')
 
 predicted_class = np.argmax(model.predict(preprocessed_input))
 
