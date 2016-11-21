@@ -22,7 +22,7 @@ def bust(image):
     original = load_img(image, target_size=(150, 150))  # Load image and resize to 150x150
     array = img_to_array(original, dim_ordering='tf')  # Convert image to numpy array
     normalized = array.astype("float") / 255.0  # Normalize the array into range 0...1
-    reshaped = normalized.reshape((1,) + normalized.shape)  # Reshape for input for CNN
+    reshaped = np.expand_dims(normalized, axis=0)  # Reshape for input for CNN
 
     # Load the CNN architecture and pre-trained weights, compile the model
     model = cnn.CNNArchitecture.select('MiniVGGNet', 150, 150, 3, 3)  # Select MiniVGGNet
@@ -41,7 +41,7 @@ def bust(image):
     if pred == 1 or pred == 2:
         print (Fore.GREEN + "[POSITIVE] ") + (Fore.BLACK + "File {}: {} ({:.2f}%)").format(
             image, labels[int(pred)], predictions[pred] * 100)
-    elif pred == 0:
+    if pred == 0:
         print (Fore.RED + "[NEGATIVE] ") + (Fore.BLACK + "File {}: other ({:.2f}%)").format(
             image, predictions[pred] * 100)
 
@@ -60,11 +60,11 @@ def npbust(image):
     resized = original.resize((150, 150), resample=Image.BILINEAR)  # Resize
     image_array = np.asarray(resized)  # Convert image to numpy array for rescaling
     normalized = image_array.astype('float') / 255.0  # Normalize into range 0...1
-    reshaped = normalized.reshape((1,) + normalized.shape)  # Reshape for input to CNN
+    reshaped = np.expand_dims(normalized, axis=0)  # Reshape for input for CNN
 
     # Load the CNN architecture and pre-trained weights, compile the model
     model = cnn.CNNArchitecture.select('MiniVGGNet', 150, 150, 3, 3)  # Select MiniVGGNet
-    model_weights = resource_filename(__name__, 'tf-weights.h5')  # Locate model weights
+    model_weights = resource_filename(__name__, 'weights.h5')  # Locate model weights
     model.load_weights(model_weights)  # Load weights
     model.compile(loss='mse', optimizer='sgd', metrics=['accuracy'])  # Compile the model
 

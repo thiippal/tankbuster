@@ -1,6 +1,4 @@
-# from keras.applications.vgg16 import VGG16
 from keras.preprocessing import image
-# from keras.applications.vgg16 import preprocess_input
 from keras.layers.core import Lambda
 from keras.models import Sequential
 from tankbuster.cnn import CNNArchitecture
@@ -69,18 +67,22 @@ def grad_cam(input_model, image, category_index, layer_name):
     image = np.minimum(image, 255)
 
     cam = cv2.applyColorMap(np.uint8(255 * cam), cv2.COLORMAP_JET)
-    cam = np.float32(cam) + np.float32(image)
-    cam = 255 * cam / np.max(cam)
+    # cam = np.float32(cam) + np.float32(image)
+    # cam = 255 * cam / np.max(cam)
     return np.uint8(cam)
 
+# Load input
 preprocessed_input = load_image(sys.argv[1])
 
-# model = VGG16(weights='imagenet')
-
+# Load model & weights
 model = CNNArchitecture.select('MiniVGGNet', 150, 150, 3, 3)
 model.load_weights('tankbuster/engine/weights.h5')
 
+# Predict output
 predicted_class = np.argmax(model.predict(preprocessed_input))
 
+# Create CAM
 cam = grad_cam(model, preprocessed_input, predicted_class, "maxpooling2d_2")
-cv2.imwrite("cam.jpg", cam)
+
+# Write CAM to disk
+cv2.imwrite("cam.png", cam)
