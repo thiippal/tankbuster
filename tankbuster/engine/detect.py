@@ -4,7 +4,7 @@ from PIL import Image
 from .. import cnn
 from pkg_resources import resource_filename
 from colorama import init, Fore
-from keras.preprocessing.image import load_img, img_to_array
+from keras.preprocessing.image import load_img, img_to_array, array_to_img
 init(autoreset=True)
 
 def bust(image):
@@ -28,10 +28,9 @@ def bust(image):
     model = cnn.CNNArchitecture.select('MiniVGGNet', 150, 150, 3, 3)  # Select MiniVGGNet
     model_weights = resource_filename(__name__, 'weights.h5')  # Locate model weights
     model.load_weights(model_weights)  # Load weights
-    model.compile(loss='mse', optimizer='sgd', metrics=['accuracy'])  # Compile the model
 
     # Return the prediction
-    predictions = model.predict_proba(reshaped, verbose=0)[0]
+    predictions = model.predict(reshaped, verbose=0)[0]
 
     # Retrieve the most probable class prediction
     labels = {0: 'other', 1: 'T-72', 2: 'BMP'}  # Class labels
@@ -56,7 +55,7 @@ def npbust(image):
         Returns a dictionary of labels and their associated probabilities.
     """
     # Load and process the image
-    original = Image.fromarray(image, 'RGB')
+    original = array_to_img(image, dim_ordering='tf')
     resized = original.resize((150, 150), resample=Image.BILINEAR)  # Resize
     image_array = np.asarray(resized)  # Convert image to numpy array for rescaling
     normalized = image_array.astype('float') / 255.0  # Normalize into range 0...1
@@ -66,10 +65,9 @@ def npbust(image):
     model = cnn.CNNArchitecture.select('MiniVGGNet', 150, 150, 3, 3)  # Select MiniVGGNet
     model_weights = resource_filename(__name__, 'weights.h5')  # Locate model weights
     model.load_weights(model_weights)  # Load weights
-    model.compile(loss='mse', optimizer='sgd', metrics=['accuracy'])  # Compile the model
 
     # Return class probabilities
-    predictions = model.predict_proba(reshaped, verbose=0)[0]
+    predictions = model.predict(reshaped, verbose=0)[0]
     preds = {'other': (predictions[0] * 100), 't-72': (predictions[1] * 100), 'bmp': (predictions[2] * 100)}
 
     return preds
