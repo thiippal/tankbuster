@@ -28,3 +28,5 @@ if os.path.isfile(user_input):
 
     # Feed the image to the classifier
     bust(user_input)
+
+## TODO Use name __main__ instead: https://www.quora.com/Why-would-you-use-if-__name__-__main__
