@@ -16,20 +16,17 @@ def target_category_loss_output_shape(input_shape):
     return input_shape
 
 def normalize(x):
-    # utility function to normalize a tensor by its L2 norm
+    # Normalize a tensor by its L2 norm
     return x / (K.sqrt(K.mean(K.square(x))) + 1e-5)
 
 def preprocess(img_path):
-    img = image.load_img(img_path, target_size=(150, 150))
-    x = image.img_to_array(img, dim_ordering='tf')
-    x = x.astype("float") / 255.0  # Normalize the array into range 0...1
-    x = np.expand_dims(x, axis=0)
-    return x
-
-def load_original(img_path):
     original = image.load_img(img_path)
     original = image.img_to_array(original, dim_ordering='tf')
-    return original
+    resized = image.load_img(img_path, target_size=(150, 150))
+    preprocessed = image.img_to_array(resized, dim_ordering='tf')
+    preprocessed = preprocessed.astype("float") / 255.0  # Normalize the array into range 0...1
+    preprocessed = np.expand_dims(preprocessed, axis=0)
+    return original, preprocessed
 
 def grad_cam(input_model, image, category_index, layer_name):
     model = Sequential()
@@ -64,22 +61,18 @@ def grad_cam(input_model, image, category_index, layer_name):
     for i, w in enumerate(weights):
         cam += w * output[:, :, i]  # Multiply each feature map by its weight; add to the CAM array (+=)
 
-    cam = cv2.resize(cam, (150, 150))
-    cam = np.maximum(cam, 0)
-    cam /= np.max(cam)
+    cam = np.maximum(cam, 0)  # ???
+    cam /= np.max(cam)  # Divide by maximum value
 
-    cam = cv2.applyColorMap(np.uint8(255 * cam), cv2.COLORMAP_JET)
-    cam = np.float32(cam)
-    cam = 255 * cam / np.max(cam)
+    cam = cv2.applyColorMap(np.uint8(255 * cam), cv2.COLORMAP_JET)  # Apply JET colour map to CAM
+    cam = np.float32(cam)  # ???
+    cam = 255 * cam / np.max(cam)  # ???
 
     # Return CAM as NumPy array
     return np.uint8(cam)
 
-# Get original
-original_input = load_original(sys.argv[1])
-
 # Load and preprocess input
-preprocessed_input = preprocess(sys.argv[1])
+original_input, preprocessed_input = preprocess(sys.argv[1])
 
 # Load model & weights
 model = CNNArchitecture.select('MiniVGGNet', 150, 150, 3, 3)
@@ -102,4 +95,4 @@ cam = cam + original_input  # Combine CAM and original image
 cv2.putText(cam, class_label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
 # Write CAM to disk
-cv2.imwrite("cam.png", cam)
+cv2.imwrite("cam.jpg", cam)
