@@ -13,7 +13,7 @@ class CNNArchitecture:
 
         # Map strings to functions
         nets = {
-            "MiniVGGNet": CNNArchitecture.MiniVGGNet,
+            "MiniVGGNet": CNNArchitecture.MiniVGGNet
         }
 
         # Initialize architecture
@@ -32,9 +32,9 @@ class CNNArchitecture:
         model = Sequential()
 
         # Define the first set of  CONV -> RELU -> CONV -> RELU -> POOL layers
-        model.add(Convolution2D(32, 3, 3, input_shape=(imgrows, imgcols, numchannels), dim_ordering='tf'))
+        model.add(Convolution2D(32, 3, 3, input_shape=(imgrows, imgcols, numchannels), dim_ordering='tf', border_mode='same'))
         model.add(Activation("relu"))
-        model.add(Convolution2D(32, 3, 3))
+        model.add(Convolution2D(32, 3, 3, border_mode='same'))
         model.add(Activation("relu"))
         model.add(MaxPooling2D(pool_size=(3, 3)))
 
@@ -42,9 +42,9 @@ class CNNArchitecture:
         model.add(Dropout(0.25))
 
         # Define the second set of CONV -> RELU -> CONV -> RELU -> POOL layers
-        model.add(Convolution2D(64, 3, 3))
+        model.add(Convolution2D(64, 3, 3, border_mode='same'))
         model.add(Activation("relu"))
-        model.add(Convolution2D(64, 3, 3))
+        model.add(Convolution2D(64, 3, 3, border_mode='same'))
         model.add(Activation("relu"))
         model.add(MaxPooling2D(pool_size=(2, 2)))
 
