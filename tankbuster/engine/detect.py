@@ -1,11 +1,11 @@
 # Import the necessary packages
-import numpy as np
-from PIL import Image
 from .. import cnn
 from pkg_resources import resource_filename
 from colorama import init, Fore
-from keras.preprocessing.image import load_img, img_to_array, array_to_img
-init(autoreset=True)
+import numpy as np
+import cv2
+
+init(autoreset=True)  # Colorama switch for default output after printing coloured text
 
 def bust(image):
     """
@@ -19,9 +19,9 @@ def bust(image):
     """
 
     # Load and process the image
-    original = load_img(image, target_size=(150, 150))  # Load image and resize to 150x150
-    array = img_to_array(original, dim_ordering='tf')  # Convert image to numpy array
-    normalized = array.astype("float") / 255.0  # Normalize the array into range 0...1
+    original = cv2.imread(image)  # Load image
+    resized = cv2.resize(original, (150, 150), interpolation=cv2.INTER_NEAREST)  # Resize image
+    normalized = resized.astype("float") / 255.0  # Normalize the array into range 0...1
     reshaped = np.expand_dims(normalized, axis=0)  # Reshape for input for CNN
 
     # Load the CNN architecture and pre-trained weights, compile the model
@@ -44,7 +44,7 @@ def bust(image):
         print (Fore.RED + "[NEGATIVE] ") + (Fore.BLACK + "File {}: other ({:.2f}%)").format(
             image, predictions[pred] * 100)
 
-def npbust(image):
+def npbust(image, **kwargs):
     """
     Predict the class of the input image (other/t-72/bmp).
 
@@ -55,15 +55,15 @@ def npbust(image):
         Returns a dictionary of labels and their associated probabilities.
     """
     # Load and process the image
-    original = array_to_img(image, dim_ordering='tf')
-    resized = original.resize((150, 150), resample=Image.BILINEAR)  # Resize
-    image_array = np.asarray(resized)  # Convert image to numpy array for rescaling
-    normalized = image_array.astype('float') / 255.0  # Normalize into range 0...1
+    original = cv2.resize(image, (150, 150), interpolation=cv2.INTER_NEAREST)  # Resize
+    normalized = original.astype('float') / 255.0  # Normalize into range 0...1
     reshaped = np.expand_dims(normalized, axis=0)  # Reshape for input for CNN
 
     # Load the CNN architecture and pre-trained weights, compile the model
     model = cnn.CNNArchitecture.select('MiniVGGNet', 150, 150, 3, 3)  # Select MiniVGGNet
-    model_weights = resource_filename(__name__, 'weights.h5')  # Locate model weights
+    model_weights = resource_filename(__name__, 'weights.h5')  # Locate default weights
+    if 'weights' in kwargs:  # Check if alternate weights have been provided
+        model_weights = kwargs['weights']  # Set alternate weights
     model.load_weights(model_weights)  # Load weights
 
     # Return class probabilities
