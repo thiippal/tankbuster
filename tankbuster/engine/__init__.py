@@ -1,1 +1,1 @@
-from detect import bust, npbust
+from detect import bust

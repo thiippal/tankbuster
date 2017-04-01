@@ -1,32 +1,51 @@
 import os
 import argparse
 from tankbuster.engine import bust
-from tankbuster.utils import list_images
+from keras.preprocessing.image import list_pictures
 
 # Set up the argument parser
 ap = argparse.ArgumentParser()
 
 # Add argument for input
-ap.add_argument("-i", "--input", required=True, help="The image or directory to be analysed.")
+ap.add_argument("-i", "--input", required=True,
+                help="The image or directory to be passed to the neural net.")
+ap.add_argument("-n", "--network", required=True,
+                help="The neural network to be used: 'ConvNet' or 'ResNet'.")
 
 # Parse the arguments
 args = vars(ap.parse_args())
 
 # Assign arguments to variables
 user_input = args['input']
+network = args['network']
 
 # Check if the input is a directory
 if os.path.isdir(user_input):
 
-    # Feed the images to the CNN
-    images = list_images(user_input)  # retrieve image files
-    for i in images:  # loop over the images
-        bust(i)  # feed image to the classifier
+    # Feed the images to the network
+    images = list_pictures(user_input)
+
+    # Loop over the images
+    for i in images:
+
+        # Feed images to the classifier to retrieve a dictionary of predictions
+        preds = bust(i, network=network)
+
+        # Get the prediction with the highest probability
+        pred = max(preds, key=preds.get)
+
+        # Print the prediction
+        print "*** Now processing {} - predicted {} ...".format(i, pred)
 
 # Check if the input is a file
 if os.path.isfile(user_input):
 
-    # Feed the image to the classifier
-    bust(user_input)
+    # Feed images to the classifier to retrieve a dictionary of predictions
+    preds = bust(user_input, network=network)
 
-## TODO Use name __main__ instead: https://www.quora.com/Why-would-you-use-if-__name__-__main__
+    # Get the prediction with the highest probability
+    pred = max(preds, key=preds.get)
+
+    # Print the prediction
+    print "*** Now processing {} - predicted {} ...".format(user_input, pred)
+

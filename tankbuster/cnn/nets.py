@@ -1,11 +1,14 @@
 # Import the necessary packages
 from keras.layers import Dense, Dropout, Activation, Flatten
-from keras.layers import Convolution2D, MaxPooling2D, Layer, ZeroPadding2D
+from keras.layers import Conv2D, MaxPooling2D, Input
 from keras.models import Sequential
-from keras import backend as K
+from keras.regularizers import l2
+from keras.applications import ResNet50
+from keras.models import Model
 
-# A class for various CNN architectures
+
 class CNNArchitecture:
+    # A class for network architectures
     def __init__(self):
         pass
 
@@ -14,8 +17,9 @@ class CNNArchitecture:
 
         # Map strings to functions
         nets = {
-            "MiniVGGNet": CNNArchitecture.MiniVGGNet,
-            "MiniVGGNetFC": CNNArchitecture.MiniVGGNetFC
+            "ConvNet": CNNArchitecture.ConvNet,
+            "ResNet": CNNArchitecture.ResNet,
+            "TopNet": CNNArchitecture.TopNet
         }
 
         # Initialize architecture
@@ -29,37 +33,38 @@ class CNNArchitecture:
         return net(*args, **kargs)
 
     @staticmethod
-    def MiniVGGNet(imgrows, imgcols, numchannels, numclasses):
+    def ConvNet(imgrows, imgcols, numchannels, numclasses):
         # Initialize the model
         model = Sequential()
 
-        # Define the first set of  CONV -> RELU -> CONV -> RELU -> POOL layers
-        model.add(Convolution2D(32, 3, 3, input_shape=(imgrows, imgcols, numchannels), dim_ordering='tf'))
+        # Define the first convolutional block
+        model.add(Conv2D(32, (3, 3), input_shape=(imgrows, imgcols, numchannels),
+                         data_format='channels_last',
+                         kernel_regularizer=l2(l=0.001)))
         model.add(Activation("relu"))
-        model.add(Convolution2D(32, 3, 3))
-        model.add(Activation("relu"))
-        model.add(MaxPooling2D(pool_size=(3, 3)))
-
-        # Add dropout
-        model.add(Dropout(0.25))
-
-        # Define the second set of CONV -> RELU -> CONV -> RELU -> POOL layers
-        model.add(Convolution2D(64, 3, 3))
-        model.add(Activation("relu"))
-        model.add(Convolution2D(64, 3, 3))
+        model.add(Conv2D(32, (3, 3), kernel_regularizer=l2(l=0.001)))
         model.add(Activation("relu"))
         model.add(MaxPooling2D(pool_size=(2, 2)))
 
-        # Add dropout
-        model.add(Dropout(0.35))
+        # Define the second convolutional block
+        model.add(Conv2D(64, (3, 3), kernel_regularizer=l2(l=0.001)))
+        model.add(Activation("relu"))
+        model.add(Conv2D(64, (3, 3), kernel_regularizer=l2(l=0.001)))
+        model.add(Activation("relu"))
+        model.add(MaxPooling2D(pool_size=(2, 2)))
 
-        # Define FC -> RELU layers
+        # Flatten the feature maps
         model.add(Flatten())
-        model.add(Dense(512))
+
+        # Add dropout
+        model.add(Dropout(rate=0.5))
+
+        # Add fully-connected layer
+        model.add(Dense(256, kernel_regularizer=l2(l=0.001)))
         model.add(Activation("relu"))
 
         # Add dropout
-        model.add(Dropout(0.5))
+        model.add(Dropout(rate=0.5))
 
         # Define the SoftMAX classifier
         model.add(Dense(numclasses))
@@ -69,48 +74,27 @@ class CNNArchitecture:
         return model
 
     @staticmethod
-    def MiniVGGNetFC(imgrows, imgcols, numchannels, numclasses):
-        # Initialize the model
-        model = Sequential()
+    def ResNet(imgrows, imgcols, numchannels):
+        # Initialize model without pre-trained weights
+        resnet = ResNet50(include_top=False,
+                          input_tensor=Input(shape=(imgrows,
+                                                    imgcols,
+                                                    numchannels)))
 
-        # Define the first set of  CONV -> RELU -> CONV -> RELU -> POOL layers
-        model.add(Convolution2D(32, 3, 3, input_shape=(imgrows, imgcols, numchannels), dim_ordering='tf'))
-        model.add(Activation("relu"))
-        model.add(Convolution2D(32, 3, 3))
-        model.add(Activation("relu"))
-        model.add(MaxPooling2D(pool_size=(3, 3)))
+        # Get output from the average pooling layer
+        model = Model(inputs=resnet.input,
+                      outputs=resnet.get_layer('avg_pool').output)
 
-        # Define the second set of CONV -> RELU -> CONV -> RELU -> POOL layers
-        model.add(Convolution2D(64, 3, 3))
-        model.add(Activation("relu"))
-        model.add(Convolution2D(64, 3, 3))
-        model.add(Activation("relu"))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
-
-        # Define the fully convolutional block
-        model.add(ZeroPadding2D(padding=(1, 1)))
-        model.add(Convolution2D(512, 5, 5, activation='relu', name='dense_1'))
-        model.add(Convolution2D(3, 1, 1, activation='relu', name='dense_2'))
-
-        # Define the 4D SoftMAX classifier
-        model.add(Softmax4D(axis=1))
-
-        # Return the network architecture
+        # Return the model
         return model
 
+    @staticmethod
+    def TopNet(input_tensor):
+        model = Sequential()
+        model.add(Flatten(input_shape=input_tensor))
+        model.add(Dropout(0.5))
+        model.add(Dense(512, activation='relu', kernel_regularizer=l2(0.001)))
+        model.add(Dropout(0.5))
+        model.add(Dense(3, activation='softmax'))
 
-class Softmax4D(Layer):
-    def __init__(self, axis=-1, **kwargs):
-        self.axis = axis
-        super(Softmax4D, self).__init__(**kwargs)
-
-    def build(self, input_shape):
-        pass
-
-    def call(self, x, mask=None):
-        e = K.exp(x - K.max(x, axis=self.axis, keepdims=True))
-        s = K.sum(e, axis=self.axis, keepdims=True)
-        return e / s
-
-    def get_output_shape_for(self, input_shape):
-        return input_shape
+        return model
