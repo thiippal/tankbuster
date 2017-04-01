@@ -7,7 +7,8 @@ from keras.preprocessing.image import load_img, img_to_array
 
 """
 This file, detect.py, contains the function that loads, pre-processes and feeds
-the input image to the selected neural network.
+the input image to the selected neural network. To make a prediction on a given
+image, call the bust function.
 """
 
 
