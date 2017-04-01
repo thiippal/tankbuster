@@ -17,7 +17,7 @@ def bust(image, network):
     Predict the class of the input image ('BMP', 'Other' or 'T-72').
 
     Arguments:
-        image: An image file.
+        image: A path to an image.
 
     Parameters:
         network: The network architecture used for making a prediction.
