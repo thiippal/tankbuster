@@ -1,6 +1,6 @@
 # Tankbuster
 
-Tankbuster is a neural network trained to recognize Soviet/Russian <a href="http://en.wikipedia.org/wiki/T-72">T-72</a> main battle tanks or <a href="http://en.wikipedia.org/wiki/BMP_development">BMP</a> armored personnel carriers in photographs.
+Tankbuster is a neural network trained to recognize Soviet/Russian <a href="http://en.wikipedia.org/wiki/T-72">T-72</a> main battle tanks and <a href="http://en.wikipedia.org/wiki/BMP_development">BMP</a> armored personnel carriers in photographs.
 
 Built using <a href="http://keras.io">Keras</a>, the network has been trained using a collection of images showing T-72s (1457 images) and BMPs (1088 images) from various angles and at various distances against a collection of photographs featuring street and natural scenes (1477 images). 
 
@@ -59,28 +59,28 @@ The <i>bust</i> function returns a dictionary of predicted class labels with the
 ## In action
 
 <b>Parked next to a Lada</b><br>
-ResNet: predicted T-72, probability 98.89%.
+ResNet: predicted T-72, probability 98.89%.<br>
 ConvNet: predicted T-72, probability 95.44%.
 
 
 <image src="demo_images/with_lada.jpg" width="400px">
 
 <b>Featured in a low-quality screen capture</b><br>
-ResNet: predicted T-72, probability 97.42%
+ResNet: predicted T-72, probability 97.42%<br>
 ConvNet: predicted BMP, probability 75.57%.
 
 
 <image src="demo_images/from_screen_capture.png" width="400px">
 
 <b>Parked in the backyard</b><br>
-ResNet: predicted BMP, probability 98.89%.
+ResNet: predicted BMP, probability 98.89%.<br>
 ConvNet: predicted BMP, probability 49.17%.
 
 
 <image src="demo_images/backyard.jpg" width="400px">
 
 <b>Knocked out in group</b><br>
-ResNet: predicted BMP, probability 99.14%.
+ResNet: predicted BMP, probability 99.14%.<br>
 ConvNet: predicted T-72, probability 41.63%.
 
 
