@@ -32,7 +32,7 @@ This will clone the repository into the subdirectory <i>tankbuster</i>, which in
 
 ### Running Tankbuster from the command line
 
-If you wish to run Tankbuster from the command line, it is best to clone this repository to get the driver script, <code>bust.py</code>.
+If you wish to run Tankbuster from the command line, use the driver script <i>bust.py</i>.
 
 To feed a single image to the neural network, use the command line prompt to enter the following command:
 
