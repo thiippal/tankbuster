@@ -6,6 +6,11 @@ from keras.regularizers import l2
 from keras.applications import ResNet50
 from keras.models import Model
 
+"""
+This file, nets.py, contains the architectures for the neural networks. These
+architectures are created using the CNNArchitecture class and its select method.
+"""
+
 
 class CNNArchitecture:
     # A class for network architectures
