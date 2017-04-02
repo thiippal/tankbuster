@@ -1,7 +1,7 @@
 
 The MIT License (MIT)
 
-Copyright (c) 2016 Tuomo Hiippala
+Copyright (c) 2016- Tuomo Hiippala
 tuomo.hiippala, at, iki.fi
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
