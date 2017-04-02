@@ -17,6 +17,7 @@ While the convolutional neural network is faster, especially when running tankbu
 Tankbuster requires Keras (2.0.2 or later) and TensorFlow (1.0.1 or later), which may be installed from the Python Package Index by entering the following commands on the command line prompt:
 
 <code>pip install Keras</code>
+
 <code>pip install tensorflow</code>
 
 These commands will install the required libraries and their dependencies.
