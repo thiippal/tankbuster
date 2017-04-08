@@ -4,12 +4,16 @@ from .. import cnn
 from pkg_resources import resource_filename
 from keras.applications.resnet50 import preprocess_input
 from keras.preprocessing.image import load_img, img_to_array
+from keras.utils.data_utils import get_file
 
 """
 This file, detect.py, contains the function that loads, pre-processes and feeds
 the input image to the selected neural network. To make a prediction on a given
 image, call the bust function.
 """
+
+# Define download URL for weights
+CONVNET_WEIGHTS = 'https://'
 
 
 def bust(image, network):
@@ -57,6 +61,10 @@ def bust(image, network):
         if network == "ConvNet":
             # Fetch architecture
             model = cnn.CNNArchitecture.select(network, 150, 150, 3, 3)
+            # Fetch weights
+            weights = get_file('conv_weights.h5', CONVNET_WEIGHTS,
+                               cache_subdir='models')
+
             # Locate ConvNet weights
             conv_weights = resource_filename(__name__, 'conv_weights.h5')
             # Load weights
