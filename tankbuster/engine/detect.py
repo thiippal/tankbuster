@@ -1,7 +1,6 @@
 # Import the necessary packages
 import numpy as np
 from .. import cnn
-from pkg_resources import resource_filename
 from keras.applications.resnet50 import preprocess_input
 from keras.preprocessing.image import load_img, img_to_array
 from keras.utils.data_utils import get_file
@@ -13,7 +12,10 @@ image, call the bust function.
 """
 
 # Define download URL for weights
-CONVNET_WEIGHTS = 'https://'
+CONVNET_WEIGHTS = 'https://github.com/thiippal/tankbuster/raw/master/' \
+                  'tankbuster/downloads/tankbuster_conv_weights.h5'
+RESNET_WEIGHTS = 'https://github.com/thiippal/tankbuster/raw/master/' \
+                 'tankbuster/downloads/tankbuster_res_weights.h5'
 
 
 def bust(image, network):
@@ -62,13 +64,11 @@ def bust(image, network):
             # Fetch architecture
             model = cnn.CNNArchitecture.select(network, 150, 150, 3, 3)
             # Fetch weights
-            weights = get_file('conv_weights.h5', CONVNET_WEIGHTS,
+            weights = get_file('tankbuster_conv_weights.h5', CONVNET_WEIGHTS,
                                cache_subdir='models')
 
-            # Locate ConvNet weights
-            conv_weights = resource_filename(__name__, 'conv_weights.h5')
             # Load weights
-            model.load_weights(conv_weights)
+            model.load_weights(weights)
 
             # Return the prediction
             predictions = model.predict(normalized, verbose=0)[0]
@@ -90,10 +90,11 @@ def bust(image, network):
             # Construct the top model
             top_model = cnn.CNNArchitecture.select("TopNet", features.shape[1:])
 
-            # Locate weights for TopNet
-            res_weights = resource_filename(__name__, 'res_weights.h5')
+            # Fetch topnet weights
+            weights = get_file('tankbuster_res_weights.h5', RESNET_WEIGHTS,
+                               cache_subdir='models')
             # Load weights
-            top_model.load_weights(res_weights)
+            top_model.load_weights(weights)
 
             # Return the prediction
             predictions = top_model.predict(features, verbose=0)[0]
