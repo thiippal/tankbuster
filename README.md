@@ -14,15 +14,13 @@ While the convolutional neural network is faster, especially when running tankbu
 
 ## Installation
 
-Tankbuster requires Keras (2.0.2 or later) and TensorFlow (1.0.1 or later), which may be installed from the Python Package Index by entering the following commands on the command line prompt:
+Tankbuster requires Keras (2.0.2 or later), Pillow (4.1.0 or later) and TensorFlow (1.0.1 or later) and their dependencies, which may be all installed effortlessly from the Python Package Index by entering the following commands on the command line prompt:
 
-<code>pip install Keras</code>
+<code>pip install tankbuster</code>
 
-<code>pip install tensorflow</code>
+These commands will install the required libraries and their dependencies. As usual, it is a very good idea to install Tankbuster and its dependencies in its own virtual environment.
 
-These commands will install the required libraries and their dependencies.
-
-Next, change to the directory where you want to install Tankbuster. The enter the following command:
+Naturally, you can also clone the repository. To do so, enter the following command:
 
 <code>git clone https://github.com/thiippal/tankbuster.git</code>
 
